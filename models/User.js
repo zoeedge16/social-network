@@ -32,6 +32,14 @@ const userSchema = new Schema(
         
 
     },
+    {
+        toJSON: {
+            virtual: true,
+        },
+        id: false,
+    }
+);
 
+const User = model('user', userSchema);
 
-)
+module.exports = User;
