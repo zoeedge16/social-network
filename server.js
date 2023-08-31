@@ -1,6 +1,6 @@
 const express = require('express');
 const db = require('./config/connection');
-// const routes = require('./routes');
+const routes = require('./routes');
 // const { MongoClient } = require('mongodb');
 
 const cwd = process.cwd();
@@ -12,7 +12,7 @@ const app = express();
 // middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(routes);
+app.use(routes);
 
 // once database is open then start listening for requests 
 db.once('open', () => {

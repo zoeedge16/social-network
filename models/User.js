@@ -15,14 +15,14 @@ const userSchema = new Schema(
             unique: true,
             match: emailRegEx
         },
-        // Need to make this model still
+        
         thoughts: [
             {
                 type: Schema.Types.ObjectId,
                 ref: 'thoughts'
             }
         ],
-        // Need to make this model still
+        
         friends: [
             {
                 type: Schema.Types.ObjectId,

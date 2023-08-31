@@ -5,7 +5,7 @@ const reactionSchema = new Schema(
     {
         reactionId: {
             type: Schema.Types.ObjectId,
-            default: () => new mongoose.Types.ObjectId(),
+            default: () => new Types.ObjectId(),
         },
         reactionBody: {
             type: String,
@@ -13,8 +13,8 @@ const reactionSchema = new Schema(
             max: 280,
         },
         username: {
-            type: Schema.Types.ObjectId,
-            ref: 'users'
+            type: String,
+            required: true
         },
         createdAt: {
             type: Date,
@@ -35,8 +35,8 @@ const thoughtSchema = new Schema(
         thoughtText: {
             type: String,
             require: true,
-            min: 1,
-            max: 280
+            minLength: 1,
+            maxLength: 280
         },
         createdAt: {
             type: Date,
@@ -50,14 +50,15 @@ const thoughtSchema = new Schema(
             }
         },
         username: {
-            type: Schema.Types.ObjectId,
-            ref: 'users'
+            type: String,
+            required: true
         },
         reactions: [reactionSchema]
     },
     {
         toJSON: {
-            virtuals: true
+            virtuals: true,
+            getters: true
         },
         id: false
     }

@@ -4,7 +4,7 @@ module.exports = {
     // get all users
     async getUsers(req,res) {
         try {
-            const users = await User.find();
+            const users = await User.find().populate({ path: 'thoughts' });
             res.json(users);
         } catch (err) {
             res.status(500).json(err)
@@ -48,7 +48,11 @@ module.exports = {
 
     async updateUser(req, res){
         try {
-            const user = await User.findOneAndUpdate({ id: req.params.userId }, { $set: req.body }, { runValidators: true, new: true });
+            const user = await User.findOneAndUpdate(
+                { _id: req.params.userId }, 
+                { $set: req.body }, 
+                { runValidators: true, new: true }
+            );
             res.status(200).json(user)
         } catch (err) {
             res.status(500).json(err);

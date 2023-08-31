@@ -4,8 +4,8 @@ module.exports = {
     // get all thoughts
     async getThoughts(req,res) {
         try {
-            const thoughts = await Thought.find();
-            res.json(thoughts);
+            const thought = await Thought.find()
+            res.json(thought);
         } catch (err) {
             res.status(500).json(err)
         }
@@ -28,8 +28,8 @@ module.exports = {
         try {
             const thought = await Thought.create(req.body);
             const user = await User.findOneAndUpdate(
-                { username: req.body.username },
-                { $push: { thoughts: thoughts._id } },
+                { _id: req.body.userId },
+                { $addToSet: { thoughts: thought._id } },
                 { new: true }
             );
             if(!user) {
@@ -55,7 +55,11 @@ module.exports = {
 
     async updateThought(req, res){
         try {
-            const thought = await Thought.findOneAndUpdate({ id: req.params.thoughtId }, { $set: req.body }, { runValidators: true, new: true });
+            const thought = await Thought.findOneAndUpdate(
+                { _id: req.params.thoughtId }, 
+                { $set: req.body }, 
+                { runValidators: true, new: true }
+            );
             res.status(200).json(thought);
         } catch (err) {
             res.status(500).json(err);
