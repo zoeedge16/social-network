@@ -1,4 +1,4 @@
-const { Thought } = require('../models');
+const { User, Thought } = require('../models');
 
 module.exports = {
     // get all thoughts
@@ -27,7 +27,15 @@ module.exports = {
     async createThought(req,res) {
         try {
             const thought = await Thought.create(req.body);
-            res.json(thought)
+            const user = await User.findOneAndUpdate(
+                { username: req.body.username },
+                { $push: { thoughts: thoughts._id } },
+                { new: true }
+            );
+            if(!user) {
+                return res.status(404).json( { message: 'Thought created, but user does not exist.' } )
+            }
+            res.json( { message: 'Thought created' } )
         } catch (err) {
             res.status(500).json(err)
         }
@@ -36,14 +44,8 @@ module.exports = {
     // delete a thought
     async deleteThought(req,res) {
         try {
-            const thought = await Thought.findOneAndRemove( { _id: req.params.thoughtId } );
-
-            if(!user) {
-                return res.status(404).json( {message: 'No such thought exists'} )
-            }
-
-            res.json({ message: 'Thought successfully deleted' })
-
+            const thought = await Thought.findOneAndDelete( { _id: req.params.thoughtId } );
+            res.status(200).json(thought)
         } catch (err) {
             console.log(err);
             res.status(500).json(err);
@@ -53,14 +55,8 @@ module.exports = {
 
     async updateThought(req, res){
         try {
-            const thought = await Thought.findOneAndUpdate({ id: req.params.thoughtId })
-                .select('-__v');
-
-            if (!thought) {
-                return res.status(404).json( { message: 'Thought not found' } )
-            }
-
-        res.json(user);
+            const thought = await Thought.findOneAndUpdate({ id: req.params.thoughtId }, { $set: req.body }, { runValidators: true, new: true });
+            res.status(200).json(thought);
         } catch (err) {
             res.status(500).json(err);
         }
