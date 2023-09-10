@@ -27,7 +27,7 @@ const reactionSchema = new Schema(
                 })
             }
         }
-    }
+    },
 );
 
 const thoughtSchema = new Schema(
@@ -41,8 +41,8 @@ const thoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
-            get: function() {
-                return this.createdAt.toLocaleString('en-US', {
+            get: function(value) {
+                return value.toLocaleString('en-US', {
                     year: 'numeric',
                     month: 'numeric',
                     day: 'numeric'
@@ -71,6 +71,6 @@ thoughtSchema
     })
 
 
-const Thought = model('thoughts', thoughtSchema);
+const Thought = model('thought', thoughtSchema);
 
 module.exports = Thought;
